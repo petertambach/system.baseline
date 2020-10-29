@@ -1,0 +1,33 @@
+# .zshrc file managed by 'baseline' ansible role
+# Peter Tambach, 2018
+# Licence: BSD
+
+export ZSH=$HOME/.oh-my-zsh
+
+{% if flavour == 'hypervisor' %}
+  ZSH_THEME="{{ zsh_theme_hypervisor }}"
+{% elif flavour == 'prod' %}
+  ZSH_THEME="{{ zsh_theme_prod }}"
+{% elif flavour == 'acc' %}
+  ZSH_THEME="{{ zsh_theme_acc }}"
+{% elif flavour == 'dev' %}
+  ZSH_THEME="{{ zsh_theme_dev }}"
+{% else %}
+  ZSH_THEME="{{ zsh_theme_workstation }}"
+{% endif %}
+
+
+plugins=(
+  git vundle
+  )
+
+source $ZSH/oh-my-zsh.sh
+
+# Manually set TERM, because of some broken terminal clients (PuTTY)
+export TERM=xterm-256color
+
+{% if zsh_paster %}
+6p() { curl -s -F "content=<${1--}" -F ttl=604800 -w "%{redirect_url}\n" -o /dev/null https://paste.techinc.nl/; }
+{% endif %}
+
+

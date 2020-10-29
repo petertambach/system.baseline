@@ -1,0 +1,113 @@
+---
+- name: Upgrade packages
+  action: yum name=* state=latest
+  tags: yum
+
+- name: Install epel repository
+  action: yum pkg=epel-release state=present  
+  
+- name: Install common packages
+  action: yum pkg={{ item }} state=present
+  vars:
+    item:
+    - mc
+    - htop
+    - nmap
+    - curl
+    - git
+    - gitflow
+    - vim
+    - wget
+    - tree
+    - net-tools
+    - screen
+    - tmux
+    - tcpdump
+    - nmap-ncat
+    - mtr
+    - hping3
+    - dialog
+    - bash-completion
+    - bzip2
+    - xz
+    - whois
+    - telnet
+    - time
+    - lvm2
+    - lsof
+    - gnupg2
+    - ftp
+    - bind-utils
+    - ca-certificates
+    - bridge-utils
+    - fail2ban-server
+    - hdparm
+    - smartmontools
+    - sysfsutils
+    - iotop
+    - iftop
+    - zsh
+    - yum-utils
+    - iptables-services
+    - policycoreutils-python
+    - selinux-policy-devel
+    - ctags-etags
+    - yum-cron
+    - deltarpm
+  tags: common
+
+- name: Remove unneeded packages
+  action: yum pkg={{ item }} state=absent
+  vars:
+    item:
+    - firewalld
+    - iwl100-firmware
+    - iwl1000-firmware
+    - iwl105-firmware
+    - iwl135-firmware
+    - iwl2000-firmware
+    - iwl2030-firmware
+    - iwl3160-firmware
+    - iwl3945-firmware
+    - iwl4965-firmware
+    - iwl5000-firmware
+    - iwl5150-firmware
+    - iwl6000-firmware
+    - iwl6000g2a-firmware
+    - iwl6000g2b-firmware
+    - iwl6050-firmware
+    - iwl7260-firmware
+    - iwl7265-firmware
+    - NetworkManager
+    - wpa_supplicant
+    - fail2ban
+    - fail2ban-firewalld
+    - fail2ban-sendmail
+    - aic94xx-firmware
+    - alsa-firmware
+    - alsa-tools-firmware
+    - alsa-lib
+    - ivtv-firmware
+    - kexec-tools
+
+- name: Start and enable firewall
+  service: name=iptables state=started enabled=yes
+
+- service: name=ip6tables state=started enabled=yes
+
+- name: MOTD
+  action: template src=motd.j2 dest=/etc/motd
+  tags:
+    - motd_config
+
+- name: remove some files from homedir
+  file:
+    path:
+      - /root/.cshrc
+      - /root/.tcshrc
+    state: absent
+
+- name: dotfiles
+  copy: src=bashrc dest=/root/.bashrc owner=root group=root mode=0644
+  when: not install_zsh
+

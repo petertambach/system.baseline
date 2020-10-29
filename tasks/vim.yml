@@ -1,0 +1,19 @@
+---
+- copy: src=vimrc dest=/root/.vimrc owner=root group=root mode=0644
+
+- name: Create .vim dir
+  file: path=/root/.vim owner=root group=root mode=0755 state=directory
+
+- name: Clone Vundle
+  git:
+    repo: 'https://github.com/VundleVim/Vundle.vim.git'
+    dest: /root/.vim/bundle/Vundle.vim
+    update: no
+  register: vundle_installed
+
+- name: Install Vim plugins
+  #command: su - root -c "vim -E -s -c 'source ~/.vimrc' -c VundleInstall -c qall"
+  shell: vim +VundleInstall +qall
+  register: vim_plugins_installed
+  #changed_when: vim_plugins_installed.rc != 0
+  when: vundle_installed is changed
