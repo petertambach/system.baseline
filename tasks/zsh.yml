@@ -1,0 +1,28 @@
+---
+- name: Install zsh, if not already (Centos)
+  action: yum pkg=zsh state=present
+  when: ansible_os_family == "RedHat"
+
+- name: Install zsh, if not already (Debian)
+  action: apt pkg=zsh state=present update_cache=yes
+  when: ansible_os_family == "Debian"
+  
+- name: Install oh-my-zsh
+  git:
+    repo: 'https://github.com/robbyrussell/oh-my-zsh'
+    dest: /root/.oh-my-zsh
+
+- name: Check if .zshrc is installed
+  stat: path=/root/.zshrc
+  register: zshrc_result  
+    
+- name: install .zshrc
+  template:
+    src: zshrc.j2
+    dest: /root/.zshrc
+  when: not zshrc_result.stat.exists
+
+- name: Change user's shell
+  user:
+    name: root
+    shell: /bin/zsh

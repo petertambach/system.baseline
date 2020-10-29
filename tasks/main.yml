@@ -1,0 +1,18 @@
+---
+# main tasks file for baseline
+
+- name: Update system and install base packages (Centos)
+  include_tasks: "centos.yml"
+  when: ansible_os_family == "RedHat"
+
+- name: Update system and install base packages (Debian)
+  include_tasks: "debian.yml"
+  when: ansible_os_family == "Debian"
+
+- name: Install zsh
+  include_tasks: zsh.yml
+  when: install_zsh
+
+- name: Install vim
+  include_tasks: vim.yml
+  when: install_vim

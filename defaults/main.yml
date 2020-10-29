@@ -1,0 +1,25 @@
+---
+# defaults file for baseline
+# Peter 'Piele' Tambach, 2019
+# Licence: BSD
+
+# MOTD user and e-mail
+baseline_manager_user: "Peter Tambach"
+baseline_manager_email: "piele at creativeserver dot net"
+
+# Installation flavour can be any of workstation, hypervisor, prod, acc, or dev
+flavour: 'acc'
+
+# By default, we install zsh with oh-my-zsh (and make it default), unless you provide install_zsh: false
+install_zsh: true
+
+# install different themes for different flavours
+zsh_theme_workstation: 'powerline'
+zsh_theme_hypervisor: 'takashiyoshida' # strug, takashiyoshida, philips
+zsh_theme_prod: 'bira' # bira, sporty_256, intheloop
+zsh_theme_acc: 'fletcherm' # fino, gnzh, fletcherm
+zsh_theme_dev: 'fox' # fox, juanghortado, duellj, half-life
+
+zsh_paster: true
+
+install_vim: true
